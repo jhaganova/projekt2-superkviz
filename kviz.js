@@ -26,10 +26,12 @@ let questionGroup = [
     },
 ];
 
+let userAnswers = [];
+let currentQuestionIndex = 0;
 
-console.log(questionGroup)
-displayQuestion(questionGroup[0], 0)
 
+
+console.log(questionGroup);
 
 
 function displayQuestion(questionData, questionIndex) {
@@ -39,6 +41,8 @@ function displayQuestion(questionData, questionIndex) {
         quizDiv = document.createElement('div');
         quizDiv.className = 'kviz';
         document.body.appendChild(quizDiv);
+    } else {
+        quizDiv.innerHTML = "";
     }
     
     let numberQuestion = document.createElement('h3');
@@ -87,16 +91,40 @@ function displayQuestion(questionData, questionIndex) {
 
     questionData.answers.forEach(function(ele, idx, arr){
         let questionOption = document.createElement('li');
-        questionOptionsList.appendChild(questionOption);
+        questionOption.setAttribute("data-odpoved", idx);
         questionOption.innerText = ele;
-        })
+
+        questionOptionsList.appendChild(questionOption);
 
 
+        questionOption.addEventListener('click', onClickAnswer.bind(questionOption));
+        });
+
+}
+
+
+displayQuestion(questionGroup[0], 0);
+
+
+
+function onClickAnswer() {
+    let answer = this;
+    let userAnswer = answer.getAttribute('data-odpoved');
+    userAnswers.push(userAnswer);
+
+    console.log(userAnswer);
+
+    nextPage();
+}
+
+
+
+function nextPage() {
+    currentQuestionIndex++;
+    displayQuestion(questionGroup[currentQuestionIndex], currentQuestionIndex);
 }
 
 
 
 
 
-// questionData
-// questionIndex
