@@ -208,7 +208,3 @@ function displayResults() {
 
 }
 
-
-// go to results
-// display result
-
