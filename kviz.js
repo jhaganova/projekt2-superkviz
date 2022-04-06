@@ -1,28 +1,28 @@
-let answers1 = ['answer1', 'answer2', 'answer3']
-let answers2 = ['answer1', 'answer2', 'answer3']
-let answers3 = ['answer1', 'answer2', 'answer3']
+let answers1 = ['War, anger, blood', 'Death, sleep, dreams', 'Wilderness, wandering, freedom']
+let answers2 = ['Survival, prosperity, happiness', 'Gentleness, indecisiveness, whimsical thinking', 'Change, creativity, imagination']
+let answers3 = ['Dreams, peace, close bonds', 'Youthful joy, happiness, life', 'Innocence, purity, true love']
 
 
 let questionGroup = [
     {
-        question: "question 1",
+        question: "What is the meaning of poppy flower?",
         image: "obrazky/flower1.jpg",
         answers: answers1,
-        correctAnswer: 0,
+        correctAnswer: 1,
     },
 
     {
-        question: "question 2",
+        question: "What is the meaning of dandelion flower?",
         image: "obrazky/flower2.jpg",
         answers: answers2,
         correctAnswer: 0,
     },
 
     {
-        question: "question 3",
+        question: "What is the meaning of daisy flower?",
         image: "obrazky/flower3.jpg",
         answers: answers3,
-        correctAnswer: 0,
+        correctAnswer: 2,
     },
 ];
 
@@ -31,19 +31,30 @@ let currentQuestionIndex = 0;
 
 
 
+
+
 console.log(questionGroup);
 
 
-function displayQuestion(questionData, questionIndex) {
-    let quizDiv = document.getElementsByClassName('kviz')[0];
+function createOrClearDiv(className) {
+    let div = document.getElementsByClassName(className)[0];
     
-    if (quizDiv == undefined) {
-        quizDiv = document.createElement('div');
-        quizDiv.className = 'kviz';
-        document.body.appendChild(quizDiv);
+    if (div == undefined) {
+        div = document.createElement('div');
+        div.className = className;
+        document.body.appendChild(div);
     } else {
-        quizDiv.innerHTML = "";
+        div.innerHTML = "";
     }
+
+    return div;
+}
+
+
+
+function displayQuestion(questionData, questionIndex) {
+    let quizDiv = createOrClearDiv('kviz');
+
     
     let numberQuestion = document.createElement('h3');
     numberQuestion.id = 'poradi';
@@ -113,8 +124,14 @@ function onClickAnswer() {
     userAnswers.push(userAnswer);
 
     console.log(userAnswer);
+    console.log(questionGroup[currentQuestionIndex].answers[userAnswer]);
 
-    nextPage();
+    if(currentQuestionIndex >= (questionGroup.length - 1)) {
+        displayResults();
+    }
+
+    else 
+        nextPage();
 }
 
 
@@ -127,4 +144,71 @@ function nextPage() {
 
 
 
+function displayResults() {
+    let quizDiv = document.getElementsByClassName('kviz')[0];
+    quizDiv.style.display = 'none';
+
+    let resultsDiv = createOrClearDiv('vysledek');
+    resultsDiv.style.display = 'block';
+
+
+    let resultTitle = document.createElement('h2');
+    resultTitle.innerText = 'Your results:'
+
+    resultsDiv.appendChild(resultTitle);
+
+
+    let correctCount = 0;
+
+    for(let i=0; i<questionGroup.length; i++) {
+        let questionData = questionGroup[i];
+        let questionAnswers = questionData.answers;
+        let userAnswerIdx = userAnswers[i];
+        let userAnswer = questionAnswers[userAnswerIdx];
+        let correctAnswerIdx = questionData.correctAnswer;
+        let correctAnswer = questionAnswers[correctAnswerIdx];
+
+        let questionTitle = document.createElement('h3');
+        questionTitle.innerText = (i+1) + '. ' + questionData.question;
+
+        resultsDiv.appendChild(questionTitle);
+
+        let userAnswerDisplay = document.createElement('p');
+        userAnswerDisplay.innerText = 'Your answer: ' + userAnswer;
+        
+        resultsDiv.appendChild(userAnswerDisplay);
+
+        let correctAnswerDisplay = document.createElement('p');
+        correctAnswerDisplay.innerText = 'Correct answer: ' + correctAnswer;
+
+        resultsDiv.appendChild(correctAnswerDisplay);
+
+        if(userAnswerIdx == correctAnswerIdx) {
+            userAnswerDisplay.style.color = '#4CBB17';
+            correctAnswerDisplay.innerText = 'You are correct!'
+            correctCount++;
+        } 
+
+        else {
+            userAnswerDisplay.style.color = '#ff0000';
+        }
+    }
+
+
+    
+    let successRate = Math.round((correctCount/questionGroup.length)*100);
+
+    let successRateDisplay = document.createElement('h2');
+        successRateDisplay.innerText = correctCount + ' out of ' + questionGroup.length + ' correct. Success rate ' + successRate + '%.'
+
+        resultsDiv.appendChild(successRateDisplay);
+
+
+
+
+}
+
+
+// go to results
+// display result
 
