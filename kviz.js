@@ -58,7 +58,7 @@ function displayQuestion(questionData, questionIndex) {
     
     let numberQuestion = document.createElement('h3');
     numberQuestion.id = 'poradi';
-    numberQuestion.innerText = 'Otázka ' + (questionIndex + 1) + '/' + questionGroup.length;
+    numberQuestion.innerText = 'Question  ' + (questionIndex + 1) + '/' + questionGroup.length;
 
     quizDiv.appendChild(numberQuestion);
 
